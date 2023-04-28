@@ -23,9 +23,9 @@ for sheet_name in xl.sheet_names:
 
     # Escribe los encabezados en el archivo de texto
     with open(f'../text_files/{sheet_name}', 'w') as f:
-        f.write(';'.join(headers) + '\n')
+        f.write(','.join(headers) + '\n')
 
     # Escribe los datos en el archivo de texto
     with open(f'../text_files/{sheet_name}', 'a') as f:
         for index, row in df.iterrows():
-            f.write(';'.join([str(x) if str(x) != 'nan' else '' for x in row.tolist()]) + '\n')
+            f.write(','.join([str(x) if str(x) != 'nan' else '' for x in row.tolist()]) + '\n')

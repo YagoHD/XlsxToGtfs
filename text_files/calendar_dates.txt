@@ -1,1 +1,1 @@
-service_id;date;holiday_name;exception_type
+service_id,date,holiday_name,exception_type
