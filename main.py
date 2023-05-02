@@ -12,16 +12,22 @@ class ExcelToTextConverter:
         # Crear los widgets
         self.file_label = tk.Label(master, text="Seleccionar archivo de Excel:")
         self.file_button = tk.Button(master, text="Buscar archivo", command=self.select_file)
+        self.dir_label = tk.Label(master, text="Seleccionar directorio de salida:")
+        self.dir_button = tk.Button(master, text="Buscar directorio", command=self.select_directory)
+        self.dir_selected_label = tk.Label(master, text="")
         self.filename_label = tk.Label(master, text="")
         self.convert_button = tk.Button(master, text="Convertir a archivos de texto", state=tk.DISABLED, command=self.convert)
         self.status_label = tk.Label(master, text="", fg="green")
 
         # Colocar los widgets en la ventana
-        self.file_label.grid(row=0, column=0, padx=10, pady=10)
-        self.file_button.grid(row=0, column=1, padx=10, pady=10)
-        self.filename_label.grid(row=1, column=0, padx=10, pady=10)
-        self.convert_button.grid(row=1, column=1, padx=10, pady=10)
-        self.status_label.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+        self.file_label.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        self.file_button.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.filename_label.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        self.dir_label.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+        self.dir_button.grid(row=4, column=0, padx=10, pady=10, sticky="nsew")
+        self.dir_selected_label.grid(row=5, column=0, padx=10, pady=10, sticky="nsew")
+        self.convert_button.grid(row=6, column=0, padx=10, pady=10, sticky="nsew")
+        self.status_label.grid(row=7, column=0, padx=10, pady=10, sticky="nsew")
 
     def select_file(self):
         # Mostrar un diálogo para seleccionar el archivo de Excel
@@ -30,13 +36,19 @@ class ExcelToTextConverter:
         self.convert_button.config(state=tk.NORMAL)
         self.status_label.config(text="")
 
+    def select_directory(self):
+        # Mostrar un diálogo para seleccionar el directorio de salida
+        self.directory = filedialog.askdirectory()
+        self.dir_selected_label.config(text=self.directory)
+
     def convert(self):
         # Lee el archivo Excel
         xl = pd.ExcelFile(self.filename)
 
-        # Crea la carpeta "text_files" si no existe
-        if not os.path.exists('../text_files'):
-            os.makedirs('../text_files')
+        # Crea la carpeta "text_files" en el directorio seleccionado si no existe
+        text_files_directory = os.path.join(self.directory, 'text_files')
+        if not os.path.exists(text_files_directory):
+            os.makedirs(text_files_directory)
 
         # Itera sobre todas las hojas del archivo de Excel
         for sheet_name in xl.sheet_names:
@@ -51,11 +63,13 @@ class ExcelToTextConverter:
             headers = list(df.columns.values)
 
             # Escribe los encabezados en el archivo de texto
-            with open(f'../text_files/{sheet_name}', 'w') as f:
+            with open(os.path.join(text_files_directory, sheet_name), 'w') as f:
                 f.write(','.join(headers) + '\n')
 
             # Escribe los datos en el archivo de texto
-            with open(f'../text_files/{sheet_name}', 'a') as f:
+            with open(os.path.join(text_files_directory, sheet_name), 'a') as f:
+               
+
                 for index, row in df.iterrows():
                     f.write(','.join([str(x) if str(x) != 'nan' else '' for x in row.tolist()]) + '\n')
 
