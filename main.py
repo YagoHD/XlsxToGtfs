@@ -14,10 +14,10 @@ class ExcelToTextConverter:
         self.file_button = tk.Button(master, text="Buscar archivo", command=self.select_file)
         self.dir_label = tk.Label(master, text="Seleccionar directorio de salida:")
         self.dir_button = tk.Button(master, text="Buscar directorio", command=self.select_directory)
-        self.dir_selected_label = tk.Label(master, text="")
-        self.filename_label = tk.Label(master, text="")
+        self.dir_selected_label = tk.Label(master, text="", fg="blue",font="BOLD")
+        self.filename_label = tk.Label(master, text="", fg="blue",font="BOLD")
         self.convert_button = tk.Button(master, text="Convertir a archivos de texto", state=tk.DISABLED, command=self.convert)
-        self.status_label = tk.Label(master, text="", fg="green")
+        self.status_label = tk.Label(master, text="", fg="green", font="BOLD")
 
         # Colocar los widgets en la ventana
         self.file_label.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
@@ -68,8 +68,6 @@ class ExcelToTextConverter:
 
             # Escribe los datos en el archivo de texto
             with open(os.path.join(text_files_directory, sheet_name), 'a') as f:
-               
-
                 for index, row in df.iterrows():
                     f.write(','.join([str(x) if str(x) != 'nan' else '' for x in row.tolist()]) + '\n')
 
