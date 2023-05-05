@@ -64,8 +64,8 @@ class ExcelToGtfs:
             df = pd.read_excel(excel, sheet_name, dtype=str)
 
             # Escribe los datos en el archivo de texto
-            with open(os.path.join(text_files_directorio, sheet_name + '.txt'), 'w') as f:
-                f.write(df.to_csv(index=False))
+            with open(os.path.join(text_files_directorio, sheet_name ), 'w') as f:
+                f.write(df.to_csv(index=False, lineterminator='\n'))
     
         self.label_status.config(text="La conversión se completó exitosamente.")
 

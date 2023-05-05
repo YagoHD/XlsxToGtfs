@@ -1,5 +1,13 @@
-import tkinter as tk
+import sys
 import os
+
+# Este bloque de código es para manejar el problema del _MEIPASS
+if hasattr(sys, '_MEIPASS'):
+    os.chdir(sys._MEIPASS)
+
+import tkinter as tk
+import pandas as pd
+import numpy as np
 
 class InterfazPrincipal(tk.Tk):
     def __init__(self):
@@ -21,11 +29,12 @@ class InterfazPrincipal(tk.Tk):
         
 
     def ejecutar_doc1(self):
-        os.system('python codigo/XlsxToGtfs.py')
+        script_path = os.path.join(os.getcwd(), 'XlsxToGtfs.py')
+        os.system(f'python "{script_path}"')
 
     def ejecutar_doc2(self):
-        os.system('python codigo/GtfsToXlsx.py')
-
+        script_path = os.path.join(os.getcwd(), 'GtfsToXlsx.py')
+        os.system(f'python "{script_path}"')
 
 if __name__ == '__main__':
     app = InterfazPrincipal()

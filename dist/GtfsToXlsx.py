@@ -72,7 +72,7 @@ class GtfsToExcel:
 
 
             # Crea un DataFrame de Pandas con los datos del archivo de texto
-            df = pd.DataFrame([linea.split(',') for linea in lineas])
+            df = pd.DataFrame([linea.split(',') for linea in lineas if len(linea)>0])
 
             # Transpone el DataFrame para que las filas se conviertan en columnas
             #df = df.transpose()

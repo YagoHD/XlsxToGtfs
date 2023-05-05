@@ -12,6 +12,7 @@ build_exe_options = {
     'include_msvcr': True,
     'build_exe': './dist', 
 }
+# Añadir los archivos al include_files si se está ejecutando el código con cx_Freeze
 
 # Configuración del ejecutable
 base = None
@@ -19,12 +20,12 @@ if sys.platform == 'win32':
     base = 'Win32GUI'
 
 executables = [
-    Executable('main.py', base=base, target_name='ExcelToTextConverter')
+    Executable('main.py', base=base, target_name='Convertidor tXlsx & Gtds')
 ]
 
 # Configuración del setup
 setup(name="mi_app",
       version="1.0",
-      description='Convierte un archivo Excel a archivos de texto',
+      description='Convierte un archivo Excel a archivos de texto Gtfs y viceversa',
       options={"build_exe": build_exe_options},
       executables=[Executable("codigo/main.py", base=base, target_name="XlsxToGtfs.exe",icon='codigo/icono/icono.ico')])
