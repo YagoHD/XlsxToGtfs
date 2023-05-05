@@ -1,81 +1,32 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-import pandas as pd
-import numpy as np
 import os
 
-class ExcelToGtfs:
-    def __init__(self, master):
-        self.master = master
-        master.title("convertiridor Xlsx -> Gtfs")
+class InterfazPrincipal(tk.Tk):
+    def __init__(self):
+        super().__init__()
 
-        # Crear los widgets
-        self.label_seleccion_archivo = tk.Label(master, text="Seleccionar archivo de Excel:")
-        self.boton_buscar_archivo = tk.Button(master, text="Buscar archivo", command=self.seleccionar_archivo)
-        self.label_seleccion_directorio = tk.Label(master, text="Seleccionar directorio de salida:")
-        self.boton_buscar_directorio = tk.Button(master, text="Buscar directorio", command=self.seleccionar_directorio)
-        self.label_link_directorio = tk.Label(master, text="", fg="blue")
-        self.label_link_archivo = tk.Label(master, text="", fg="blue")
-        self.boton_conversion = tk.Button(master, text="Convertirir a archivos de texto", state=tk.DISABLED, command=self.convertir)
-        self.label_status = tk.Label(master, text="", fg="green")
+        # Configuración de la ventana principal
+        self.title("Conversor")
+        
+        self.label_decision = tk.Label(self, text="Que tipo de conversion quieres utilizar: ")
+        # Crear botón1 para ejecutar XlsxToGtfs.py
+        self.boton1 = tk.Button(self, text="Xlsx -> Gtfs", command=self.ejecutar_doc1)
+        # Crear botón2 para ejecutar GtfsToXlsx.py
+        self.boton2 = tk.Button(self, text="Gtfs ->Xlsx", command=self.ejecutar_doc2)
+        
+
+        self.label_decision.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        self.boton1.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.boton2.grid(row=2,column=0, padx=10, pady=10, sticky="nsew")
+        
+
+    def ejecutar_doc1(self):
+        os.system('python codigo/XlsxToGtfs.py')
+
+    def ejecutar_doc2(self):
+        os.system('python codigo/GtfsToXlsx.py')
 
 
-        # Colocar los widgets en la ventana
-        self.label_seleccion_archivo.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-        self.boton_buscar_archivo.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
-        self.label_link_archivo.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
-        self.label_seleccion_directorio.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
-        self.boton_buscar_directorio.grid(row=4, column=0, padx=10, pady=10, sticky="nsew")
-        self.label_link_directorio.grid(row=5, column=0, padx=10, pady=10, sticky="nsew")
-        self.boton_conversion.grid(row=6, column=0, padx=10, pady=10, sticky="nsew")
-        self.label_status.grid(row=7, column=0, padx=10, pady=10, sticky="nsew")
-
-
-    def seleccionar_archivo(self):
-        # Mostrar un diálogo para seleccionar el archivo de Excel
-        self.nombre_archivo = filedialog.askopenfilename()
-        self.label_link_archivo.config(text=self.nombre_archivo)
-        self.boton_conversion.config(state=tk.NORMAL)
-        self.label_status.config(text="")
-
-    def seleccionar_directorio(self):
-        # Mostrar un diálogo para seleccionar el directorio de salida
-        self.directorio = filedialog.askdirectory()
-        self.label_link_directorio.config(text=self.directorio)
-
-    def convertir(self):
-        # Lee el archivo Excel
-        excel = pd.ExcelFile(self.nombre_archivo)
-
-        # Crea la carpeta "text_files" en el directorio seleccionado si no existe
-        text_files_directorio = os.path.join(self.directorio, 'Gtfs')
-        if not os.path.exists(text_files_directorio):
-            os.makedirs(text_files_directorio)
-
-        # Itera sobre todas las hojas del archivo de Excel
-        for sheet_name in excel.sheet_names:
-
-            # Lee los datos de la hoja del Excel
-            df = excel.parse(sheet_name)
-
-            # Reemplaza los valores NaN por un espacio vacío
-            df.replace(np.nan, '', inplace=True)
-
-            # Extrae la primera fila como encabezados de las columnas
-            headers = list(df.columns.values)
-
-            # Escribe los encabezados en el archivo de texto
-            with open(os.path.join(text_files_directorio, sheet_name), 'w') as f:
-                f.write(','.join(headers) + '\n')
-
-            # Escribe los datos en el archivo de texto
-            with open(os.path.join(text_files_directorio, sheet_name), 'a') as f:
-                for index, row in df.iterrows():
-                    f.write(','.join([str(x) if str(x) != 'nan' else '' for x in row.tolist()]) + '\n')
-
-        self.label_status.config(text="La conversión se completó exitosamente.")
-
-root = tk.Tk()
-app = ExcelToGtfs(root)
-root.mainloop()
+if __name__ == '__main__':
+    app = InterfazPrincipal()
+    app.mainloop()

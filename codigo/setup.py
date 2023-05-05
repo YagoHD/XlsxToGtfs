@@ -8,7 +8,7 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 # Opciones para el ejecutable: paquetes incluidos, archivos incluidos & la ruta donde se creará el freeze
 build_exe_options = {
     'packages': ['os', 'pandas', 'numpy'],
-    'include_files': ['Informacion.xlsx','codigo/icono/icono.ico'],
+    'include_files': ['Informacion.xlsx','codigo/icono/icono.ico','codigo/GtfsToXlsx.py','codigo/XlsxToGtfs.py'],
     'include_msvcr': True,
     'build_exe': './dist', 
 }
